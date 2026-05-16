@@ -23,6 +23,7 @@ radius = 20.0
 script = ExtResource("1_c01mt")
 
 [node name="Gameplay" type="Node2D" parent="." unique_id=795176527]
+visible = false
 script = ExtResource("1_elqb8")
 
 [node name="NoteSpawner" type="Node" parent="Gameplay" unique_id=1925321875]
@@ -68,13 +69,14 @@ offset_right = 48.0
 offset_bottom = 55.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=204184494]
+visible = false
 
 [node name="Audio" type="Node" parent="." unique_id=82212018]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Audio" unique_id=1442482724]
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=909305351 groups=["player"]]
-collision_mask = 0
+[node name="Player" type="CharacterBody2D" parent="." unique_id=909305351]
+visible = false
 script = ExtResource("2_rvslj")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1960660240]
