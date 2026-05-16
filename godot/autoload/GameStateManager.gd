@@ -9,17 +9,21 @@ var current_state: State = State.MENU
 
 func go_to_menu() -> void:
 	_set_state(State.MENU)
+	get_tree().change_scene_to_file("res://scenes/Menu.tscn")
 
 func start_game() -> void:
 	_set_state(State.PLAYING)
+	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 
 func pause_game() -> void:
 	if current_state == State.PLAYING:
 		_set_state(State.PAUSED)
+		get_tree().paused = true
 
 func resume_game() -> void:
 	if current_state == State.PAUSED:
 		_set_state(State.PLAYING)
+		get_tree().paused = false
 
 func end_game() -> void:
 	_set_state(State.RESULT)
