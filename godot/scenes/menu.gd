@@ -2,8 +2,7 @@ extends Control
 
 
 func _on_press_play() -> void:
-	get_tree().change_scene_to_file("res://scenes/MapSelect.tscn")
-	
+	GameStateManager.start_game()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

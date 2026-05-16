@@ -1,5 +1,5 @@
 # res://scenes/Gameplay.gd
-extends Node2D$CenterContainer/Button
+extends Node2D
 
 const ROTATION_STEP: float = 15.0
 const MAX_ROTATION: float = 90.0
@@ -12,7 +12,7 @@ var current_rotation: float = 0.0
 @onready var effects_container: Node = $Effects
 @onready var player: CharacterBody2D = get_node("/root/main/Player")
 @onready var judge_system: Node = $JudgeSystem
-@onready var score_manager: Node = $ScoreManager"res://scenes/Main.tscn"
+@onready var score_manager: Node = $ScoreManager
 
 func _ready() -> void:
 	judge_system.hit_result.connect(_on_hit_result)
@@ -47,7 +47,6 @@ func _check_note_hit(player_direction: int) -> void:
 func _apply_rotation(delta: float) -> void:
 	current_rotation = lerp(current_rotation, target_rotation, ROTATION_SPEED * delta)
 	rotation_degrees = current_rotation
-	print("gameplay rotation: ", rotation_degrees)
 
 func _follow_player() -> void:
 	if player:
