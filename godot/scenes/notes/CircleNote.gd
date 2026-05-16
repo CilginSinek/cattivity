@@ -4,16 +4,14 @@ extends Node2D
 signal hit(ring_index: int)
 signal missed
 
-# Kaç iç içe çember var (dıştan içe: 0, 1, 2)
-# 0 = en dış (50 puan), 1 = orta (100 puan), 2 = en iç (300 puan)
 const RING_RADII: Array[float] = [120.0, 80.0, 40.0]
 const RING_COLORS: Array[Color] = [
-	Color(1, 1, 1, 0.3),   # dış
-	Color(1, 1, 1, 0.6),   # orta
-	Color(1, 1, 1, 1.0),   # iç
+	Color(1, 1, 1, 0.3),
+	Color(1, 1, 1, 0.6),
+	Color(1, 1, 1, 1.0),
 ]
 
-var time_ms: float = 0.0  # BeatmapController'dan gelecek
+var time_ms: float = 0.0
 var is_hit: bool = false
 
 @onready var hit_area: Area2D = $HitArea
@@ -21,17 +19,23 @@ var is_hit: bool = false
 
 func _ready() -> void:
 	_draw_rings()
-	hit_area.input_event.connect(_on_input_event)
 
 func _draw_rings() -> void:
 	for i in range(RING_RADII.size()):
-		var circle = ColorRect.new()
-		# Şimdilik placeholder, sonra gerçek çember çizeceğiz
-		rings.add_child(circle)
+		var line = Line2D.new()
+		line.width = 3.0
+		line.default_color = RING_COLORS[i]
+		var points: PackedVector2Array = []
+		for j in range(361):
+			var angle = deg_to_rad(float(j))
+			points.append(Vector2(
+				cos(angle) * RING_RADII[i],
+				sin(angle) * RING_RADII[i]
+			))
+		line.points = points
+		rings.add_child(line)
 
 func check_hit(touch_position: Vector2) -> int:
-	# Dokunulan noktanın hangi çemberde olduğunu döndür
-	# -1 = miss, 0 = dış, 1 = orta, 2 = iç
 	var dist = global_position.distance_to(touch_position)
 	for i in range(RING_RADII.size() - 1, -1, -1):
 		if dist <= RING_RADII[i]:

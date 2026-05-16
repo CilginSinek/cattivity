@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://pd7h85d0g1lw" path="res://scenes/gameplay.gd" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://i60wipixbhom" path="res://scenes/JudgeSystem.gd" id="2_rarhs"]
 [ext_resource type="Script" uid="uid://wddgu6jaiy0m" path="res://scenes/player.gd" id="2_rvslj"]
+[ext_resource type="Script" uid="uid://b2dl135hh1bep" path="res://scenes/NoteSpawner.gd" id="2_vcsgt"]
 [ext_resource type="Script" uid="uid://iic66b5gbohw" path="res://scenes/ScoreManager.gd" id="3_vcsgt"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rvslj"]
@@ -20,6 +21,7 @@ radius = 20.0
 script = ExtResource("1_elqb8")
 
 [node name="NoteSpawner" type="Node" parent="Gameplay" unique_id=1925321875]
+script = ExtResource("2_vcsgt")
 
 [node name="JudgeSystem" type="Node" parent="Gameplay" unique_id=1487306797]
 script = ExtResource("2_rarhs")
