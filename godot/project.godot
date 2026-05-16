@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 SongManager="*uid://27dtxpkyp2qo"
 GameStateManager="*uid://dqt1tv01b5woi"
 BeatmapController="*uid://dp06kce7mm30m"
+Config="*uid://lkwhlhbqf6lw"
 
 [input]
 
