@@ -7,7 +7,7 @@ extends Control
 var _http: HTTPRequest
 
 func _ready() -> void:
-	visible = false
+	visible = true  # geçici test
 	_http = HTTPRequest.new()
 	add_child(_http)
 	_http.request_completed.connect(_on_post_complete)

@@ -95,8 +95,10 @@ offset_bottom = 40.0
 [node name="ResultUI" type="Control" parent="UI" unique_id=438137879]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 8.0
+offset_top = 9.0
+offset_right = 48.0
+offset_bottom = 49.0
 script = ExtResource("8_q8u5g")
 
 [node name="ScoreLabel" type="Label" parent="UI/ResultUI" unique_id=1133084334]
