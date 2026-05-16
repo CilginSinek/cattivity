@@ -1,6 +1,6 @@
 # res://scenes/Settings.gd
 extends Control
-
+	
 @onready var volume_slider: HSlider = $CenterContainer/VBoxContainer/VolumeRow/VolumeSlider
 @onready var key_left_button: Button = $CenterContainer/VBoxContainer/KeyLeftRow/KeyLeftButton
 @onready var key_right_button: Button = $CenterContainer/VBoxContainer/KeyRightRow/KeyRightButton
