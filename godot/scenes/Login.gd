@@ -7,10 +7,15 @@ func _ready() -> void:
 	login_button.pressed.connect(_on_login_pressed)
 	_check_token()
 
+
 func _check_token() -> void:
-	var token = JavaScriptBridge.eval("document.cookie.match(/GameToken=([^;]+)/)?.[1] || ''")
-	if token != "":
-		Config.jwt_token = token
+	if OS.has_feature("web"):
+		var token = JavaScriptBridge.eval("document.cookie.match(/GameToken=([^;]+)/)?.[1] || ''")
+		if token != "":
+			Config.jwt_token = token
+			GameStateManager.go_to_menu()
+	else:
+		# Desktop test: direkt menüye geç
 		GameStateManager.go_to_menu()
 
 func _on_login_pressed() -> void:
@@ -18,3 +23,4 @@ func _on_login_pressed() -> void:
 	var redirect_uri = (Config.BASE_URL + "/auth/42/callback").uri_encode()
 	var url = "https://api.intra.42.fr/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=public"
 	JavaScriptBridge.eval("window.location.href = '" + url + "'")
+	

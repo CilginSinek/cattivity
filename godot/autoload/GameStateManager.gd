@@ -9,6 +9,9 @@ var current_state: State = State.MENU
 
 func go_to_settings() -> void:
 	get_tree().change_scene_to_file("res://scenes/Settings.tscn")
+func go_to_menu() -> void:
+	_set_state(State.MENU)
+	get_tree().change_scene_to_file("res://scenes/Menu.tscn")
 
 func start_game() -> void:
 	_set_state(State.PLAYING)
