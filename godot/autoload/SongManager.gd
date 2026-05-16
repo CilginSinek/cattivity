@@ -16,9 +16,9 @@ func _ready() -> void:
 	add_child(_player)
 	_player.finished.connect(_on_song_finished)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if is_playing:
-		song_time = (_player.get_playback_position() * 1000.0) + offset_ms
+		song_time += delta * 1000.0
 
 func load_song(stream: AudioStream) -> void:
 	_player.stream = stream

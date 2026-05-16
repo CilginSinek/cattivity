@@ -3,14 +3,13 @@ extends Node
 
 const CircleNote = preload("res://scenes/notes/CircleNote.tscn")
 
-# Ne kadar önce ekranda gösterilsin (ms)
 const SPAWN_AHEAD_MS: float = 1000.0
 
 var _notes: Array = []
 var _next_index: int = 0
 var _active: bool = false
 
-@onready var notes_container: Node = get_node("/root/main/Gameplay/Notes")
+@onready var notes_container: Node = get_node("/root/main/Notes")
 @onready var judge_system: Node = get_node("/root/main/Gameplay/JudgeSystem")
 
 func _ready() -> void:
@@ -39,13 +38,12 @@ func _spawn_note(note_data) -> void:
 	var instance = CircleNote.instantiate()
 	instance.time_ms = note_data.time_ms
 	instance.direction = note_data.direction
-	# Dönüş noktasına göre pozisyon — oyuncunun önünde
-	instance.position = Vector2(0, -300)
+	var player = get_node("/root/main/Player")
+	instance.global_position = player.global_position + Vector2(0, 400)
 	notes_container.add_child(instance)
 
 func _check_miss() -> void:
 	for child in notes_container.get_children():
-		# 200ms geçtiyse ve hala hit olmadıysa miss
 		if SongManager.song_time > child.time_ms + 200.0 and not child.is_hit:
 			judge_system.judge(child.time_ms, child.direction, -1)
 			child.queue_free()

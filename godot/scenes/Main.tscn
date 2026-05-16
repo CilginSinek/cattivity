@@ -1,14 +1,18 @@
 [gd_scene format=3 uid="uid://155xx7s6y6ta"]
 
+[ext_resource type="Script" uid="uid://ck0se0p53kx0l" path="res://scenes/Main.gd" id="1_c01mt"]
 [ext_resource type="Script" uid="uid://pd7h85d0g1lw" path="res://scenes/gameplay.gd" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://i60wipixbhom" path="res://scenes/JudgeSystem.gd" id="2_rarhs"]
 [ext_resource type="Script" uid="uid://wddgu6jaiy0m" path="res://scenes/player.gd" id="2_rvslj"]
 [ext_resource type="Script" uid="uid://b2dl135hh1bep" path="res://scenes/NoteSpawner.gd" id="2_vcsgt"]
 [ext_resource type="Script" uid="uid://iic66b5gbohw" path="res://scenes/ScoreManager.gd" id="3_vcsgt"]
+[ext_resource type="Script" uid="uid://dgawv07q56ili" path="res://scenes/Wall.gd" id="6_nxtc6"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rvslj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c01mt"]
+size = Vector2(20, 100)
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_rvslj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nxtc6"]
+size = Vector2(20, 100)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_elqb8"]
 radius = 20.0
@@ -16,6 +20,7 @@ radius = 20.0
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_rvslj"]
 
 [node name="main" type="Node" unique_id=1046669809]
+script = ExtResource("1_c01mt")
 
 [node name="Gameplay" type="Node2D" parent="." unique_id=795176527]
 script = ExtResource("1_elqb8")
@@ -29,23 +34,38 @@ script = ExtResource("2_rarhs")
 [node name="ScoreManager" type="Node" parent="Gameplay" unique_id=1316854615]
 script = ExtResource("3_vcsgt")
 
-[node name="Notes" type="Node" parent="Gameplay" unique_id=1286666536]
-
 [node name="Effects" type="Node" parent="Gameplay" unique_id=1257091839]
 
-[node name="Ground" type="StaticBody2D" parent="Gameplay" unique_id=1913357468]
-physics_material_override = SubResource("PhysicsMaterial_rvslj")
+[node name="WallLeft" type="Area2D" parent="Gameplay" unique_id=1517856880]
+position = Vector2(-20, 0)
+collision_layer = 2
+script = ExtResource("6_nxtc6")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Ground" unique_id=1589222430]
-shape = SubResource("WorldBoundaryShape2D_rvslj")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/WallLeft" unique_id=256053873]
+shape = SubResource("RectangleShape2D_c01mt")
 
-[node name="Polygon2D" type="Polygon2D" parent="Gameplay/Ground" unique_id=1404633831]
+[node name="ColorRect" type="ColorRect" parent="Gameplay/WallLeft" unique_id=788044923]
+custom_minimum_size = Vector2(20, 100)
+offset_left = -27.0
+offset_top = -41.0
+offset_right = 13.0
+offset_bottom = -1.0
+color = Color(0.21960784, 0.1764706, 0.29411766, 1)
 
-[node name="ColorRect" type="ColorRect" parent="Gameplay" unique_id=775985131]
-offset_left = -21.0
-offset_top = -22.0
-offset_right = 19.0
-offset_bottom = 18.0
+[node name="WallRight" type="Area2D" parent="Gameplay" unique_id=1667330751]
+collision_layer = 2
+script = ExtResource("6_nxtc6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/WallRight" unique_id=1452321609]
+position = Vector2(17, 0)
+shape = SubResource("RectangleShape2D_nxtc6")
+
+[node name="ColorRect" type="ColorRect" parent="Gameplay/WallRight" unique_id=115886723]
+custom_minimum_size = Vector2(20, 100)
+offset_left = 8.0
+offset_top = -45.0
+offset_right = 48.0
+offset_bottom = 55.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=204184494]
 
@@ -53,7 +73,8 @@ offset_bottom = 18.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Audio" unique_id=1442482724]
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=909305351]
+[node name="Player" type="CharacterBody2D" parent="." unique_id=909305351 groups=["player"]]
+collision_mask = 0
 script = ExtResource("2_rvslj")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1960660240]
@@ -61,6 +82,12 @@ script = ExtResource("2_rvslj")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=371198306]
 position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_elqb8")
+debug_color = Color(0.5613761, 0.5336061, 0.4796641, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=256182316]
 texture = SubResource("PlaceholderTexture2D_rvslj")
+
+[node name="Notes" type="Node" parent="." unique_id=1286666536]
+
+[connection signal="body_entered" from="Gameplay/WallLeft" to="Gameplay/WallLeft" method="_on_wall_left_body_entered"]
+[connection signal="body_entered" from="Gameplay/WallRight" to="Gameplay/WallRight" method="_on_wall_right_body_entered"]
