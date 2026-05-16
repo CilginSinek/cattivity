@@ -5,7 +5,7 @@ const Play = require("../models/Play");
 
 exports.root = async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.userId;
 
     const users = await User.aggregate([
       {

@@ -5,7 +5,7 @@ const fs = require("fs");
 
 exports.savePlay = async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.userId;
     const { mapId, score } = req.body;
 
     const map = await Map.findById(mapId);
@@ -66,7 +66,7 @@ exports.uploadMap = async (req, res) => {
     const newMap = await Map.create({
       name,
       artist,
-      creator: req.session.userId,
+      creator: req.userId,
       bpm,
       offset: offset || 0,
       duration,
@@ -87,7 +87,7 @@ exports.deleteMap = async (req, res) => {
     if (!map) {
       return res.status(404).json({ error: "Map not found" });
     }
-    const user = await User.findById(req.session.userId).select("-password");
+    const user = await User.findById(req.userId).select("-password");
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }

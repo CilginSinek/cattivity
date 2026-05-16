@@ -1,6 +1,4 @@
 const express = require("express");
-const session = require("express-session");
-const { MongoStore } = require("connect-mongo");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
@@ -26,20 +24,13 @@ const corsOptions = {
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
-  allowedHeaders: "Content-Type",
+  allowedHeaders: "Content-Type,Authorization",
 };
 app.use(cors(corsOptions));
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGOURL }),
-  }),
-);
+
 app.use(
   fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },

@@ -1,14 +1,21 @@
-const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
-module.exports = async (req, res, next) => {
-  if(!req.session.userId)
+module.exports = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token)
     return res
       .status(401)
       .json({ status: "error", message: "You can't do that. Login!" });
-  const user = await User.findById(req.session.userId);
-  if (!req.session.userId || !user)
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch {
     return res
       .status(401)
-      .json({ status: "error", message: "You can't do that. Login!" });
-  next();
+      .json({ status: "error", message: "Invalid or expired token." });
+  }
 };

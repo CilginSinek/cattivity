@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 exports.login = async (req, res) => {
   try {
@@ -8,10 +9,14 @@ exports.login = async (req, res) => {
       throw "No user found with this email, please register before login";
     const isMatch = await user.comparePassword(password);
     if (isMatch) {
-      req.session.userId = user._id;
-      res.status(201).json({ status: "success" });
+      const token = jwt.sign(
+        { userId: user._id },
+        process.env.SECRET,
+        { expiresIn: "7d" }
+      );
+      res.status(201).json({ status: "success", token });
     } else {
-      throw "Wrong Password of Email";
+      throw "Wrong Password or Email";
     }
   } catch (error) {
     res.status(400).send(error);
@@ -80,19 +85,22 @@ exports.callback = async (req, res) => {
       user = await User.create({ name, email, password });
     }
 
-    req.session.userId = user._id;
-    res.status(201).json({ status: "success", user });
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.SECRET,
+      { expiresIn: "7d" }
+    );
+    res.cookie("GameToken", token, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "Lax",
+    });
+    res.redirect(process.env.GAMEURL);
   } catch (error) {
     res.status(400).send(error);
   }
 };
 
 exports.logout = async (req, res) => {
-  try {
-    req.session.destroy(() => {
-      res.status(201).json({ status: "success" });
-    });
-  } catch (error) {
-    res.status(401).json({ error });
-  }
+  res.status(200).json({ status: "success", message: "Logged out. Please delete your token on client side." });
 };
