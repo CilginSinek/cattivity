@@ -81,3 +81,4 @@ func set_offset(ms: float) -> void:
 func _on_song_finished() -> void:
 	is_playing = false
 	emit_signal("song_ended")
+	GameStateManager.end_game()
