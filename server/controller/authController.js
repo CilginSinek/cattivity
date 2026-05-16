@@ -95,7 +95,7 @@ exports.callback = async (req, res) => {
       secure: true,
       sameSite: "Lax",
     });
-    res.redirect(process.env.GAMEURL);
+    res.redirect(process.env.GAMEURL + '/?token=' + token);
   } catch (error) {
     res.status(400).send(error);
   }
