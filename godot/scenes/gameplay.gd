@@ -18,6 +18,9 @@ func _ready() -> void:
 	judge_system.hit_result.connect(_on_hit_result)
 	judge_system.missed.connect(score_manager.add_miss)
 
+func _on_hit_result(score: int) -> void:
+	score_manager.add_hit(score)
+
 func _process(delta: float) -> void:
 	_handle_input()
 	_apply_rotation(delta)
@@ -39,9 +42,6 @@ func _apply_rotation(delta: float) -> void:
 func _follow_player() -> void:
 	if player:
 		global_position = player.global_position
-
-func _on_hit_result(ring_index: int, score: int) -> void:
-	score_manager.add_hit(score)
 
 func reset() -> void:
 	target_rotation = 0.0

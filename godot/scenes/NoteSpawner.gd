@@ -3,11 +3,15 @@ extends Node
 
 const CircleNote = preload("res://scenes/notes/CircleNote.tscn")
 
+# Ne kadar önce ekranda gösterilsin (ms)
+const SPAWN_AHEAD_MS: float = 1000.0
+
 var _notes: Array = []
 var _next_index: int = 0
 var _active: bool = false
 
 @onready var notes_container: Node = get_node("/root/main/Gameplay/Notes")
+@onready var judge_system: Node = get_node("/root/main/Gameplay/JudgeSystem")
 
 func _ready() -> void:
 	SongManager.song_started.connect(_on_song_started)
@@ -17,6 +21,7 @@ func _process(_delta: float) -> void:
 	if not _active:
 		return
 	_check_spawn()
+	_check_miss()
 
 func setup(notes: Array) -> void:
 	_notes = notes
@@ -25,22 +30,25 @@ func setup(notes: Array) -> void:
 func _check_spawn() -> void:
 	if _next_index >= _notes.size():
 		return
-	
 	var next_note = _notes[_next_index]
-	# 1000ms önce spawn et ki ekrana gelsin
-	if SongManager.song_time >= next_note.time_ms - 1000.0:
+	if SongManager.song_time >= next_note.time_ms - SPAWN_AHEAD_MS:
 		_spawn_note(next_note)
 		_next_index += 1
 
 func _spawn_note(note_data) -> void:
 	var instance = CircleNote.instantiate()
-	instance.position = note_data.position
 	instance.time_ms = note_data.time_ms
+	instance.direction = note_data.direction
+	# Dönüş noktasına göre pozisyon — oyuncunun önünde
+	instance.position = Vector2(0, -300)
 	notes_container.add_child(instance)
-	
-	# JudgeSystem'e bağla
-	var judge = get_node("/root/main/Gameplay/JudgeSystem")
-	instance.hit.connect(judge.judge_hit)
+
+func _check_miss() -> void:
+	for child in notes_container.get_children():
+		# 200ms geçtiyse ve hala hit olmadıysa miss
+		if SongManager.song_time > child.time_ms + 200.0 and not child.is_hit:
+			judge_system.judge(child.time_ms, child.direction, -1)
+			child.queue_free()
 
 func _on_song_started() -> void:
 	_active = true
