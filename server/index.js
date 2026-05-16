@@ -1,6 +1,6 @@
 const express = require("express");
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const { MongoStore } = require('connect-mongo');
 const mongoose = require("mongoose");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
@@ -13,7 +13,7 @@ const authRouter = require("./router/authRouter");
 
 //* app settings
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 mongoose
   .connect(process.env.MONGOURL, {})
