@@ -16,3 +16,7 @@ func _process(delta: float) -> void:
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit(0)
+
+
+func _on_setting_pressed() -> void:
+	GameStateManager.go_to_settings()

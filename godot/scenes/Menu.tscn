@@ -40,5 +40,10 @@ text = "Play"
 layout_mode = 2
 text = "Quit"
 
+[node name="Setting" type="Button" parent="CenterContainer/VBoxContainer" unique_id=144807623]
+layout_mode = 2
+text = "Setting"
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_press_play"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Quit" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Setting" to="." method="_on_setting_pressed"]

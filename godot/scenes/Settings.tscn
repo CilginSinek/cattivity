@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://c8l80emx6xhqg"]
+
+[ext_resource type="Script" uid="uid://bw6rttiuc4x7t" path="res://scenes/Settings.gd" id="1_rbmmp"]
+
+[node name="Settings" type="Control" unique_id=1495276754]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_rbmmp")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1667421206]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2093319807]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1289744108]
+layout_mode = 2
+
+[node name="VolumeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1435873907]
+layout_mode = 2
+
+[node name="voice" type="Label" parent="CenterContainer/VBoxContainer/VolumeRow" unique_id=338636494]
+layout_mode = 2
+
+[node name="VolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/VolumeRow" unique_id=799636238]
+layout_mode = 2
+
+[node name="KeyLeftRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=414867981]
+layout_mode = 2
+
+[node name="KeyLeftRow" type="Label" parent="CenterContainer/VBoxContainer/KeyLeftRow" unique_id=41821634]
+layout_mode = 2
+
+[node name="KeyLeftButton" type="Button" parent="CenterContainer/VBoxContainer/KeyLeftRow" unique_id=195252371]
+layout_mode = 2
+
+[node name="KeyRightRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1943095863]
+layout_mode = 2
+
+[node name="KeyRightRow" type="Label" parent="CenterContainer/VBoxContainer/KeyRightRow" unique_id=538892844]
+layout_mode = 2
+
+[node name="KeyRightButton" type="Button" parent="CenterContainer/VBoxContainer/KeyRightRow" unique_id=1406288210]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1510960540]
+layout_mode = 2
