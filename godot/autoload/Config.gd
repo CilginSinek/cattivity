@@ -2,7 +2,7 @@
 extends Node
 
 const BASE_URL: String = "http://localhost:5000"
-const FORTYTWO_CLIENT_ID: String = "BURAYA_CLIENT_ID"
+const FORTYTWO_CLIENT_ID: String = "u-s4t2ud-c94ca0bb6b25a81807c7860f603a782f0da5c9dc6487f2847bd149bf717d13a0"
 var jwt_token: String = ""
 
 func get_auth_header() -> String:

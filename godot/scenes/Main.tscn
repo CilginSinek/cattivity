@@ -116,9 +116,11 @@ offset_bottom = 23.0
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Audio" unique_id=1442482724]
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=909305351]
+motion_mode = 1
 script = ExtResource("2_rvslj")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1960660240]
+zoom = Vector2(20, 20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=371198306]
 position = Vector2(-1, 0)

@@ -24,10 +24,11 @@ func _on_hit_result(score: int) -> void:
 func _process(delta: float) -> void:
 	_handle_input()
 	_apply_rotation(delta)
-	_follow_player()
+	#_follow_player()
 
 func _handle_input() -> void:
 	if Input.is_action_just_pressed("rotate_left"):
+		print("rotate_left pressed!")
 		target_rotation -= ROTATION_STEP
 		target_rotation = clamp(target_rotation, -MAX_ROTATION, MAX_ROTATION)
 		_check_note_hit(0)
