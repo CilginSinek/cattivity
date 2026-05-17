@@ -142,6 +142,23 @@ exports.profile = async (req, res) => {
   }
 };
 
+exports.getmapPackage = async (req, res) => {
+  try {
+    const mapId = req.params.id;
+    const map = await Map.findById(mapId);
+    if (!map) {
+      return res.status(404).json({ error: "Map not found" });
+    }
+    res.download(map.packagePath, `${map.name}.zip`, (err) => {
+      if (err) {
+        res.status(500).json({ error: "Error downloading map package" });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getmap = async (req, res) => {
   try {
     const mapId = req.params.id;
@@ -207,4 +224,3 @@ exports.maps = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
