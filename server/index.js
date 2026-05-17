@@ -8,7 +8,8 @@ require("dotenv").config();
 //* import Routers
 const pageRouter = require("./router/pageRouter");
 const authRouter = require("./router/authRouter");
-const gameRouter = require("./router/gameRouter");
+// const gameRouter = require("./router/gameRouter");
+const gameRouter = require("./router/gameEventRouter");
 
 //* app settings
 const app = express();

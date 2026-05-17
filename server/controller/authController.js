@@ -35,7 +35,7 @@ exports.callback = async (req, res) => {
 
       const clientId = process.env.FORTYTWO_CLIENT_ID;
       const clientSecret = process.env.FORTYTWO_CLIENT_SECRET;
-      const redirectUri = process.env.FORTYTWO_REDIRECT_URI;
+      const redirectUri = process.env.FORTYTWO_CALLBACK_URI;
 
       if (!clientId || !clientSecret || !redirectUri) {
         return res.status(500).json({ error: "42 OAuth env vars missing" });
@@ -95,7 +95,7 @@ exports.callback = async (req, res) => {
       secure: true,
       sameSite: "Lax",
     });
-    res.redirect(process.env.GAMEURL + '/?token=' + token);
+    res.status(201).send("You can close the window now.");
   } catch (error) {
     res.status(400).send(error);
   }
