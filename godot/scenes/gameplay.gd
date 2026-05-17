@@ -24,7 +24,6 @@ func _on_hit_result(score: int) -> void:
 func _process(delta: float) -> void:
 	_handle_input()
 	_apply_rotation(delta)
-	#_follow_player()
 
 func _handle_input() -> void:
 	if Input.is_action_just_pressed("rotate_left"):
