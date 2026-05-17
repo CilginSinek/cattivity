@@ -78,6 +78,23 @@ exports.callback = async (req, res) => {
       if (!profile.login) {
         return res.status(400).json({ error: "42 profile missing login" });
       }
+      let coalition = "none";
+      if (profile.has_coalition) {
+        const coalitionresponse = await fetch(
+          `https://api.intra.42.fr/v2/users/${profile.id}/coalitions`,
+          {
+            headers: { Authorization: `Bearer ${tokenData.access_token}` },
+          },
+        );
+        if (coalitionresponse.ok) {
+          const coalitionData = await coalitionresponse.json();
+          if (Array.isArray(coalitionData) && coalitionData.length > 0) {
+            coalition = coalitionData[0].name;
+          } else {
+            coalition = coalitionData.name;
+          }
+        }
+      }
       const name = profile.login;
       const password = `42-${profile.id || profile.login || Date.now() + Math.floor(Math.random() * 10000)}`;
       user = await User.create({ name, email, password });
