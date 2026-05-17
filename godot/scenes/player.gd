@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-const GRAVITY: float = 10.0
+const GRAVITY: float = 300.0
 
 func _physics_process(delta: float) -> void:
-	velocity.y += GRAVITY * delta
+	velocity.y += Config.gravity * delta
 	move_and_slide()

@@ -55,7 +55,8 @@ func _on_download_complete(result: int, response_code: int, headers: PackedStrin
 	play()
 
 func play() -> void:
-	_player.play()
+	if _player.stream != null:
+		_player.play()
 	is_playing = true
 	song_time = 0.0
 	emit_signal("song_started")

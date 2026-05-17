@@ -27,6 +27,7 @@ func setup(notes: Array) -> void:
 	_next_index = 0
 
 func _check_spawn() -> void:
+	print("check: ", _next_index, "/", _notes.size(), " time: ", SongManager.song_time)
 	if _next_index >= _notes.size():
 		return
 	var next_note = _notes[_next_index]
@@ -39,7 +40,8 @@ func _spawn_note(note_data) -> void:
 	instance.time_ms = note_data.time_ms
 	instance.direction = note_data.direction
 	var player = get_node("/root/main/Player")
-	instance.global_position = player.global_position + Vector2(0, 400)
+	instance.global_position = Vector2(0.0, player.global_position.y + Config.spawn_distance)
+	print("spawn pos: ", instance.global_position, " player pos: ", player.global_position)
 	notes_container.add_child(instance)
 
 func _check_miss() -> void:
