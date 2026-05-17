@@ -7,6 +7,6 @@ var jwt_token: String = ""
 
 func get_auth_header() -> String:
 	return "Bearer " + jwt_token
-# Oyun hız ayarları
+# Game speed settings
 var gravity: float = 300.0
 var spawn_distance: float = 1500.0

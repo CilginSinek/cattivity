@@ -3,7 +3,7 @@ extends Node
 
 class NoteData:
 	var time_ms: float
-	var direction: int  # 0 = sol (A), 1 = sağ (D)
+	var direction: int  # 0 = left (A), 1 = right (D)
 
 var notes: Array = []
 var map_info: Dictionary = {}

@@ -12,7 +12,7 @@ const RING_COLORS: Array[Color] = [
 ]
 
 var time_ms: float = 0.0
-var direction: int = 0  # 0 = sol, 1 = sağ
+var direction: int = 0  # 0 = left, 1 = right
 var is_hit: bool = false
 
 @onready var hit_area: Area2D = $HitArea

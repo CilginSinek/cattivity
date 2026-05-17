@@ -4,18 +4,18 @@ extends Node
 signal hit_result(score: int)
 signal missed
 
-# Timing pencereleri (ms cinsinden)
-const PERFECT_WINDOW: float = 50.0   # ±50ms = tam puan
-const GOOD_WINDOW: float = 100.0     # ±100ms = yarım puan
-const BAD_WINDOW: float = 200.0      # ±200ms = az puan
+# Timing windows (in ms)
+const PERFECT_WINDOW: float = 50.0   # ±50ms = full score
+const GOOD_WINDOW: float = 100.0     # ±100ms = half score
+const BAD_WINDOW: float = 200.0      # ±200ms = low score
 
-# Puan değerleri
+# Score values
 const PERFECT_SCORE: int = 300
 const GOOD_SCORE: int = 100
 const BAD_SCORE: int = 50
 
 func judge(note_time_ms: float, note_direction: int, player_direction: int) -> void:
-	# Yön yanlışsa direkt miss
+	# Wrong direction = direct miss
 	if note_direction != player_direction:
 		emit_signal("missed")
 		return

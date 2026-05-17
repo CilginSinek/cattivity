@@ -21,7 +21,7 @@ func _ensure_maps_dir() -> void:
 		DirAccess.make_dir_absolute(MAPS_DIR)
 
 func init_maps() -> void:
-	# API'den harita listesini çek
+	# Fetch map list from API
 	var http = HTTPRequest.new()
 	add_child(http)
 	http.request_completed.connect(_on_maps_list_received.bind(http))
@@ -38,7 +38,7 @@ func _on_maps_list_received(result: int, response_code: int, headers: PackedStri
 	json.parse(body.get_string_from_utf8())
 	maps_list = json.data
 	
-	# Eksik zip'leri indir
+	# Download missing zips
 	_download_queue.clear()
 	for map in maps_list:
 		var zip_path = MAPS_DIR + map["_id"] + ".zip"

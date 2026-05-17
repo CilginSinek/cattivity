@@ -15,7 +15,11 @@ func _process(delta: float) -> void:
 
 
 func _on_quit_button_pressed() -> void:
-	get_tree().quit(0)
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("document.cookie = 'GameToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'")
+		JavaScriptBridge.eval("window.location.href = '/'")
+	else:
+		get_tree().quit(0)
 
 
 func _on_setting_pressed() -> void:

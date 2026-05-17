@@ -44,7 +44,7 @@ func _spawn_note(note_data) -> void:
 	instance.direction = note_data.direction
 	var player = get_node("/root/main/Player")
 	
-	# Açısal dağılım — 3'lü döngü
+	# Angular distribution — 3-slot cycle
 	var x_positions = [0.0, -200.0, 200.0]
 	var x_offset = x_positions[_note_count % 3]
 	_note_count += 1

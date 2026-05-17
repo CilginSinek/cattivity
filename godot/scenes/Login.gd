@@ -10,13 +10,13 @@ func _ready() -> void:
 
 func _check_token() -> void:
 	if OS.has_feature("web"):
-		# URL'den token al: /?token=xxx
+		# Get token from URL: /?token=xxx
 		var token = JavaScriptBridge.eval("new URLSearchParams(window.location.search).get('token') || ''")
 		if token != "":
 			Config.jwt_token = token
 			GameStateManager.go_to_menu()
 		else:
-			# Cookie'den de kontrol et
+			# Also check cookie
 			var cookie_token = JavaScriptBridge.eval("document.cookie.match(/GameToken=([^;]+)/)?.[1] || ''")
 			if cookie_token != "":
 				Config.jwt_token = cookie_token
