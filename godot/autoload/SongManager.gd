@@ -16,7 +16,6 @@ var _http: HTTPRequest
 func _ready() -> void:
 	add_child(_player)
 	_player.finished.connect(_on_song_finished)
-	
 	_http = HTTPRequest.new()
 	add_child(_http)
 	_http.request_completed.connect(_on_download_complete)
@@ -29,29 +28,45 @@ func load_and_play(package_url: String) -> void:
 	var full_url = Config.BASE_URL + package_url
 	_http.request(full_url)
 
+func load_and_play_local(zip_path: String) -> void:
+	var zip = ZIPReader.new()
+	var err = zip.open(zip_path)
+	if err != OK:
+		push_error("SongManager: zip open failed: " + zip_path)
+		return
+	var mp3_data = zip.read_file("song.mp3")
+	var json_bytes = zip.read_file("map.json")
+	zip.close()
+	var json = JSON.new()
+	json.parse(json_bytes.get_string_from_utf8())
+	BeatmapController.load_from_api(json.data)
+	var stream = AudioStreamMP3.new()
+	stream.data = mp3_data
+	_player.stream = stream
+	play()
+
 func _on_download_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("SongManager: download failed")
 		return
-	
 	var temp_path = "user://temp_package.zip"
 	var file = FileAccess.open(temp_path, FileAccess.WRITE)
 	file.store_buffer(body)
 	file.close()
-	
 	var zip = ZIPReader.new()
 	var err = zip.open(temp_path)
 	if err != OK:
 		push_error("SongManager: zip open failed")
 		return
-	
 	var mp3_data = zip.read_file("song.mp3")
+	var json_bytes = zip.read_file("map.json")
 	zip.close()
-	
+	var json = JSON.new()
+	json.parse(json_bytes.get_string_from_utf8())
+	BeatmapController.load_from_api(json.data)
 	var stream = AudioStreamMP3.new()
 	stream.data = mp3_data
 	_player.stream = stream
-	
 	play()
 
 func play() -> void:

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://k7hhx23j7l5j"]
+
+[ext_resource type="Script" uid="uid://ixfwaovfddlu" path="res://scenes/MapSelect.gd" id="1_7yywt"]
+
+[node name="MapSelect" type="Control" unique_id=1196023160]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7yywt")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=479401482]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=2003899684]
+layout_mode = 2

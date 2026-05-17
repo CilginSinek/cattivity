@@ -2,7 +2,7 @@ extends Control
 
 
 func _on_press_play() -> void:
-	GameStateManager.start_game()
+	GameStateManager.go_to_map_select()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
