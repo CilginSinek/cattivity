@@ -92,7 +92,7 @@ exports.callback = async (req, res) => {
     );
     res.cookie("GameToken", token, {
       httpOnly: false,
-      secure: true,
+      secure: ((process.env.LOCALHOST).includes("localhost") || (process.env.LOCALHOST).includes("127.0.0.1")) ? false : true,
       sameSite: "Lax",
     });
     res.status(201).send("You can close the window now.");
