@@ -26,6 +26,7 @@ exports.login = async (req, res) => {
 exports.callback = async (req, res) => {
   try {
     let profile = req.user;
+    let tokenData;
     if (!profile) {
       const { code } = req.query;
       if (!code) {
@@ -56,7 +57,7 @@ exports.callback = async (req, res) => {
         return res.status(401).json({ error: "Invalid 42 code" });
       }
 
-      const tokenData = await tokenResponse.json();
+      tokenData = await tokenResponse.json();
 
       const profileResponse = await fetch("https://api.intra.42.fr/v2/me", {
         headers: { Authorization: `Bearer ${tokenData.access_token}` },
@@ -79,8 +80,9 @@ exports.callback = async (req, res) => {
         return res.status(400).json({ error: "42 profile missing login" });
       }
       let coalition = "none";
-      if (profile.has_coalition) {
-        const coalitionresponse = await fetch(
+      let coalitionresponse;
+      if (profile.cursus_users && profile.cursus_users[0]?.has_coalition) {
+        coalitionresponse = await fetch(
           `https://api.intra.42.fr/v2/users/${profile.id}/coalitions`,
           {
             headers: { Authorization: `Bearer ${tokenData.access_token}` },
@@ -95,6 +97,7 @@ exports.callback = async (req, res) => {
           }
         }
       }
+      console.log("test")
       const name = profile.login;
       const password = `42-${profile.id || profile.login || Date.now() + Math.floor(Math.random() * 10000)}`;
       user = await User.create({ name, email, password });
