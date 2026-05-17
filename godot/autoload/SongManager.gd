@@ -28,22 +28,38 @@ func load_and_play(package_url: String) -> void:
 	var full_url = Config.BASE_URL + package_url
 	_http.request(full_url)
 
-func load_and_play_local(zip_path: String) -> void:
+func _read_zip(zip_path: String) -> void:
 	var zip = ZIPReader.new()
 	var err = zip.open(zip_path)
 	if err != OK:
 		push_error("SongManager: zip open failed: " + zip_path)
 		return
-	var mp3_data = zip.read_file("song.mp3")
-	var json_bytes = zip.read_file("map.json")
+	
+	var files = zip.get_files()
+	var mp3_file = ""
+	var json_file = ""
+	for f in files:
+		if f.ends_with(".mp3"):
+			mp3_file = f
+		if f.ends_with(".json"):
+			json_file = f
+	
+	var mp3_data = zip.read_file(mp3_file)
+	var json_bytes = zip.read_file(json_file)
 	zip.close()
+	
 	var json = JSON.new()
 	json.parse(json_bytes.get_string_from_utf8())
 	BeatmapController.load_from_api(json.data)
+	
 	var stream = AudioStreamMP3.new()
 	stream.data = mp3_data
 	_player.stream = stream
+	
 	play()
+
+func load_and_play_local(zip_path: String) -> void:
+	_read_zip(zip_path)
 
 func _on_download_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	if result != HTTPRequest.RESULT_SUCCESS:
@@ -53,21 +69,7 @@ func _on_download_complete(result: int, response_code: int, headers: PackedStrin
 	var file = FileAccess.open(temp_path, FileAccess.WRITE)
 	file.store_buffer(body)
 	file.close()
-	var zip = ZIPReader.new()
-	var err = zip.open(temp_path)
-	if err != OK:
-		push_error("SongManager: zip open failed")
-		return
-	var mp3_data = zip.read_file("song.mp3")
-	var json_bytes = zip.read_file("map.json")
-	zip.close()
-	var json = JSON.new()
-	json.parse(json_bytes.get_string_from_utf8())
-	BeatmapController.load_from_api(json.data)
-	var stream = AudioStreamMP3.new()
-	stream.data = mp3_data
-	_player.stream = stream
-	play()
+	_read_zip(temp_path)
 
 func play() -> void:
 	if _player.stream != null:

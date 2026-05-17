@@ -81,6 +81,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1, 24)
 pivot_offset = Vector2(20, 20)
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRectRight" type="ColorRect" parent="Gameplay/GameplayWalls" unique_id=274278939]
 anchors_preset = 8
@@ -96,6 +97,9 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1, 24)
 pivot_offset = Vector2(20, 20)
+metadata/_edit_use_anchors_ = true
+
+[node name="Notes" type="Node" parent="Gameplay/GameplayWalls" unique_id=1286666536]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=204184494]
 visible = false
@@ -159,5 +163,3 @@ debug_color = Color(0.5613761, 0.5336061, 0.4796641, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=256182316]
 texture = ExtResource("10_lhr70")
-
-[node name="Notes" type="Node" parent="." unique_id=1286666536]

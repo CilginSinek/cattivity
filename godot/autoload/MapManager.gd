@@ -21,12 +21,26 @@ func _ensure_maps_dir() -> void:
 		DirAccess.make_dir_absolute(MAPS_DIR)
 
 func init_maps() -> void:
-	# Fetch map list from API
-	var http = HTTPRequest.new()
-	add_child(http)
-	http.request_completed.connect(_on_maps_list_received.bind(http))
-	var headers = ["Authorization: " + Config.get_auth_header()]
-	http.request(Config.BASE_URL + "/maps", headers)
+	maps_list.clear()
+	var dir = DirAccess.open("res://maps/")
+	if dir == null:
+		push_error("MapManager: maps directory not found")
+		emit_signal("maps_ready")
+		return
+	
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if file_name.ends_with(".zip"):
+			var map_id = file_name.replace(".zip", "")
+			maps_list.append({
+				"_id": map_id,
+				"name": map_id,
+				"artist": "Unknown"
+			})
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	emit_signal("maps_ready")
 
 func _on_maps_list_received(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest) -> void:
 	http.queue_free()
@@ -76,4 +90,4 @@ func get_maps() -> Array:
 	return maps_list
 
 func get_zip_path(map_id: String) -> String:
-	return MAPS_DIR + map_id + ".zip"
+	return "res://maps/" + map_id + ".zip"

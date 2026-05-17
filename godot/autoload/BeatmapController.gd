@@ -7,6 +7,7 @@ class NoteData:
 
 var notes: Array = []
 var map_info: Dictionary = {}
+var current_map: Dictionary = {}
 
 func load_from_api(data: Dictionary) -> void:
 	notes.clear()

@@ -8,7 +8,7 @@ const ROTATION_SPEED: float = 8.0
 var target_rotation: float = 0.0
 var current_rotation: float = 0.0
 
-@onready var notes_container: Node = get_node("/root/main/Notes")
+@onready var notes_container: Node = get_node("/root/main/Gameplay/GameplayWalls/Notes")
 @onready var effects_container: Node = $Effects
 @onready var player: CharacterBody2D = get_node("/root/main/Player")
 @onready var judge_system: Node = $JudgeSystem
