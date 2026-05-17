@@ -13,6 +13,8 @@ script = ExtResource("1_1hxp7")
 
 [node name="LoginButton" type="Button" parent="." unique_id=540119688]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = 523.0
+offset_top = 299.0
+offset_right = 700.0
+offset_bottom = 369.0
 text = "Login with 42"
