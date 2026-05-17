@@ -26,7 +26,6 @@ exports.login = async (req, res) => {
 exports.callback = async (req, res) => {
   try {
     let profile = req.user;
-
     if (!profile) {
       const { code } = req.query;
       if (!code) {
@@ -35,7 +34,7 @@ exports.callback = async (req, res) => {
 
       const clientId = process.env.FORTYTWO_CLIENT_ID;
       const clientSecret = process.env.FORTYTWO_CLIENT_SECRET;
-      const redirectUri = process.env.FORTYTWO_CALLBACK_URI;
+      const redirectUri = process.env.FORTYTWO_CALLBACK_URL;
 
       if (!clientId || !clientSecret || !redirectUri) {
         return res.status(500).json({ error: "42 OAuth env vars missing" });
@@ -74,9 +73,8 @@ exports.callback = async (req, res) => {
     if (!email) {
       return res.status(400).json({ error: "42 profile missing email" });
     }
-
     let user = await User.findOne({ email });
-    if (!user) {
+    if (user == null) {
       if (!profile.login) {
         return res.status(400).json({ error: "42 profile missing login" });
       }
@@ -95,9 +93,9 @@ exports.callback = async (req, res) => {
       secure: ((process.env.LOCALHOST).includes("localhost") || (process.env.LOCALHOST).includes("127.0.0.1")) ? false : true,
       sameSite: "Lax",
     });
-    res.status(201).send("You can close the window now.");
+    res.redirect(process.env.GAMEURL)
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).json({status:"error", message:error});
   }
 };
 
