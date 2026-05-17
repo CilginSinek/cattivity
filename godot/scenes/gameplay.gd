@@ -28,7 +28,6 @@ func _process(delta: float) -> void:
 
 func _handle_input() -> void:
 	if Input.is_action_just_pressed("rotate_left"):
-		print("rotate_left pressed!")
 		target_rotation -= ROTATION_STEP
 		target_rotation = clamp(target_rotation, -MAX_ROTATION, MAX_ROTATION)
 		_check_note_hit(0)
@@ -37,6 +36,8 @@ func _handle_input() -> void:
 		target_rotation += ROTATION_STEP
 		target_rotation = clamp(target_rotation, -MAX_ROTATION, MAX_ROTATION)
 		_check_note_hit(1)
+	if Input.is_action_just_pressed("ui_cancel"):
+		GameStateManager.go_to_menu()
 
 func _check_note_hit(player_direction: int) -> void:
 	for note in notes_container.get_children():

@@ -21,6 +21,7 @@ SongManager="*uid://27dtxpkyp2qo"
 GameStateManager="*uid://dqt1tv01b5woi"
 BeatmapController="*uid://dp06kce7mm30m"
 Config="*uid://lkwhlhbqf6lw"
+MapManager="*uid://145u5h8bctm5"
 
 [input]
 

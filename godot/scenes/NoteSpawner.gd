@@ -35,13 +35,21 @@ func _check_spawn() -> void:
 		_spawn_note(next_note)
 		_next_index += 1
 
+var _last_x: float = 0.0
+var _note_count: int = 0
+
 func _spawn_note(note_data) -> void:
 	var instance = CircleNote.instantiate()
 	instance.time_ms = note_data.time_ms
 	instance.direction = note_data.direction
 	var player = get_node("/root/main/Player")
-	instance.global_position = Vector2(0.0, player.global_position.y + Config.spawn_distance)
-	print("spawn pos: ", instance.global_position, " player pos: ", player.global_position)
+	
+	# Açısal dağılım — 3'lü döngü
+	var x_positions = [0.0, -200.0, 200.0]
+	var x_offset = x_positions[_note_count % 3]
+	_note_count += 1
+	
+	instance.global_position = Vector2(x_offset, player.global_position.y + Config.spawn_distance)
 	notes_container.add_child(instance)
 
 func _check_miss() -> void:
