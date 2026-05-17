@@ -100,7 +100,7 @@ exports.callback = async (req, res) => {
       console.log("test")
       const name = profile.login;
       const password = `42-${profile.id || profile.login || Date.now() + Math.floor(Math.random() * 10000)}`;
-      user = await User.create({ name, email, password });
+      user = await User.create({ name, email, password, coalition });
     }
 
     const token = jwt.sign(
