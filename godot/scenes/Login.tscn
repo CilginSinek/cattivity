@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://bhu20dj4ama56"]
 
 [ext_resource type="Script" uid="uid://bfuuva2apx5sc" path="res://scenes/Login.gd" id="1_1hxp7"]
+[ext_resource type="Texture2D" uid="uid://b43lpxjjfuuje" path="res://assets/BACKGROUND.jpg" id="2_gpj6k"]
+[ext_resource type="Texture2D" uid="uid://dhsicom6s6r8x" path="res://assets/LOGIN_BACKGROUND.png" id="3_p5ycx"]
 
 [node name="Login" type="Control" unique_id=1833823384]
 layout_mode = 3
@@ -11,10 +13,26 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1hxp7")
 
-[node name="LoginButton" type="Button" parent="." unique_id=540119688]
-layout_mode = 0
-offset_left = 523.0
-offset_top = 299.0
-offset_right = 700.0
-offset_bottom = 369.0
-text = "Login with 42"
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2125678168]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gpj6k")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=950344412]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=349617535]
+layout_mode = 2
+
+[node name="LoginButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=540119688]
+layout_mode = 2
+icon = ExtResource("3_p5ycx")

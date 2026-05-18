@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://h3egpuox770t"]
 
 [ext_resource type="Script" uid="uid://c08k8ei11c345" path="res://scenes/menu.gd" id="1_xdvgc"]
+[ext_resource type="Texture2D" uid="uid://b43lpxjjfuuje" path="res://assets/BACKGROUND.jpg" id="2_11y2r"]
+[ext_resource type="Texture2D" uid="uid://bcxev00k6w4pn" path="res://assets/MAIN-LOGO.png" id="3_o0tnf"]
 
 [node name="Menu" type="Control" unique_id=1669668337]
 layout_mode = 3
@@ -18,6 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_11y2r")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1567946924]
 layout_mode = 1
@@ -32,23 +35,25 @@ layout_mode = 2
 size_flags_stretch_ratio = 1.15
 alignment = 1
 
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer" unique_id=588929433]
+layout_mode = 2
+texture = ExtResource("3_o0tnf")
+
 [node name="Play" type="Button" parent="CenterContainer/VBoxContainer" unique_id=737776311]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Play"
 
-[node name="Leaderboard" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="Leaderboard" type="Button" parent="CenterContainer/VBoxContainer" unique_id=2030151796]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Leaderboard"
-
-[node name="Setting" type="Button" parent="CenterContainer/VBoxContainer" unique_id=144807623]
-layout_mode = 2
-text = "Setting"
 
 [node name="Quit" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1617603399]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Quit"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_press_play"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Leaderboard" to="." method="_on_leaderboard_pressed"]
-[connection signal="pressed" from="CenterContainer/VBoxContainer/Setting" to="." method="_on_setting_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Quit" to="." method="_on_quit_button_pressed"]

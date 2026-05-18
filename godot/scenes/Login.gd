@@ -1,7 +1,7 @@
 # res://scenes/Login.gd
 extends Control
 
-@onready var login_button: Button = $LoginButton
+@onready var login_button: Button = $CenterContainer/VBoxContainer/LoginButton
 
 var _http: HTTPRequest
 

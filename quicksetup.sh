@@ -35,7 +35,7 @@ echo "Server bagimliliklari yukleniyor (npm install)..."
 echo "Map dokumani ekleniyor..."
 (cd "$SERVER_DIR" && node - <<'NODE'
 const mongoose = require("mongoose");
-const Map = require("./models/Map");
+const MapModel = require("./models/Map");
 
 const mongoUrl = process.env.MONGOURL;
 if (!mongoUrl) {
@@ -57,13 +57,11 @@ const mapDoc = {
 	difficulty: "Normal",
 	tags: [],
 	playCount: 89,
-	createdAt: new Date("2026-05-18T00:55:55.704Z"),
-	updatedAt: new Date("2026-05-18T00:55:55.704Z"),
 };
 
 async function run() {
 	await mongoose.connect(mongoUrl, {});
-	const result = await Map.updateOne(
+	const result = await MapModel.updateOne(
 		{ _id: mapDoc._id },
 		{ $setOnInsert: mapDoc },
 		{ upsert: true },

@@ -10,10 +10,10 @@ config_version=5
 
 [application]
 
-config/name="New Game Project"
+config/name="Cattivity"
 run/main_scene="uid://bhu20dj4ama56"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://byy1v4dd0y3fa"
 
 [autoload]
 

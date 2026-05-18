@@ -1,7 +1,7 @@
 # res://autoload/Config.gd
 extends Node
 
-const BASE_URL: String = "http://localhost:5000"
+const BASE_URL: String = "http://localhost:5001"
 const FORTYTWO_CLIENT_ID: String = "u-s4t2ud-b017737873b270c53cd5373ee7d0874a5c7cfb671a11dcf8b7ff0cac8c21efa0"
 var jwt_token: String = ""
 var current_user: Dictionary = {}  # { name, coalition, email, _id, ... }
