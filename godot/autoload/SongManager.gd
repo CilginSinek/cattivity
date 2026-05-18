@@ -51,7 +51,7 @@ func load_and_play_url(audio_url: String) -> void:
 			(function() {
 				if (window._gameAudio) { window._gameAudio.pause(); window._gameAudio = null; }
 				window._gameAudio = new Audio('%s');
-				window._gameAudio.addEventListener('canplaythrough', function() {
+				window._gameAudio.addEventListener('canplay', function() {
 					window._gameAudio.currentTime = %f;
 					window._gameAudio.play().catch(function(e){ console.error('Audio play failed:', e); });
 				}, { once: true });

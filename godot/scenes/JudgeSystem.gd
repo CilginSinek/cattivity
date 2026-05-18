@@ -5,8 +5,8 @@ signal hit_result(score: int, note_direction: int)
 signal missed
 
 # Timing windows (ms)
-const PERFECT_WINDOW: float = 60.0   # ±60ms → inner ring = perfect
-const GOOD_WINDOW: float = 130.0     # ±130ms → outer ring = good
+const PERFECT_WINDOW: float = 90.0   # ±90ms → inner ring = perfect
+const GOOD_WINDOW: float = 180.0     # ±180ms → outer ring = good
 
 # Skor değerleri
 const PERFECT_SCORE: int = 300

@@ -11,8 +11,9 @@
 [ext_resource type="Script" uid="uid://wddgu6jaiy0m" path="res://scenes/player.gd" id="9_player"]
 [ext_resource type="Texture2D" path="res://assets/SPRITE_RAVENCLAW.png" id="10_tex"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
-size = Vector2(16, 16)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
+radius = 12.0
+height = 28.0
 
 [node name="main" type="Node"]
 script = ExtResource("1_main")
@@ -27,6 +28,7 @@ script = ExtResource("3_notespawn")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(576, 550)
+scale = Vector2(3.5, 3.5)
 collision_layer = 1
 collision_mask = 2
 script = ExtResource("9_player")
@@ -38,7 +40,7 @@ texture = ExtResource("10_tex")
 hframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_player")
+shape = SubResource("CapsuleShape2D_player")
 
 [node name="GameplayInput" type="Node2D" parent="."]
 script = ExtResource("8_gameplay")
@@ -75,23 +77,25 @@ script = ExtResource("6_hud")
 layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
-offset_right = 250.0
-offset_bottom = 40.0
-theme_override_font_sizes/font_size = 22
+offset_right = 350.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 36
 
 [node name="ComboLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 offset_left = 10.0
-offset_top = 44.0
-offset_right = 250.0
-offset_bottom = 68.0
+offset_top = 55.0
+offset_right = 350.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 32
 
 [node name="HealthLabel" type="Label" parent="UI/HUD"]
 layout_mode = 0
 offset_left = 10.0
-offset_top = 70.0
-offset_right = 250.0
-offset_bottom = 94.0
+offset_top = 95.0
+offset_right = 350.0
+offset_bottom = 130.0
+theme_override_font_sizes/font_size = 32
 
 [node name="ResultUI" type="Control" parent="UI"]
 layout_mode = 3
@@ -101,37 +105,39 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -160.0
-offset_top = -110.0
+offset_top = -140.0
 offset_right = 160.0
-offset_bottom = 110.0
+offset_bottom = 140.0
 script = ExtResource("7_result")
 
 [node name="ScoreLabel" type="Label" parent="UI/ResultUI"]
 layout_mode = 0
+offset_top = -20.0
 offset_right = 320.0
-offset_bottom = 36.0
+offset_bottom = 26.0
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 
 [node name="ComboLabel" type="Label" parent="UI/ResultUI"]
 layout_mode = 0
 offset_top = 40.0
 offset_right = 320.0
-offset_bottom = 70.0
+offset_bottom = 80.0
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
 
 [node name="RestartButton" type="Button" parent="UI/ResultUI"]
 layout_mode = 0
 offset_left = 80.0
-offset_top = 90.0
+offset_top = 110.0
 offset_right = 240.0
-offset_bottom = 122.0
+offset_bottom = 150.0
 text = "Yeniden Oyna"
 
 [node name="BackButton" type="Button" parent="UI/ResultUI"]
 layout_mode = 0
 offset_left = 80.0
-offset_top = 140.0
+offset_top = 170.0
 offset_right = 240.0
-offset_bottom = 172.0
+offset_bottom = 210.0
 text = "Ana Menüye Dön"

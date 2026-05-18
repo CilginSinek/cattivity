@@ -75,3 +75,10 @@ func _on_back_pressed() -> void:
 func _on_restart_pressed() -> void:
 	SongManager.stop()
 	get_tree().reload_current_scene()
+
+func _input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_SPACE:
+			_on_restart_pressed()

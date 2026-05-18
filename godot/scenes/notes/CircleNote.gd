@@ -8,8 +8,8 @@ var direction: int = 0   # 0 = sol (A tuşu), 1 = sağ (D tuşu)
 var is_hit: bool = false
 
 # Ring yarıçapları [outer, inner]
-const OUTER_RADIUS: float = 55.0
-const INNER_RADIUS: float = 28.0
+const OUTER_RADIUS: float = 100.0
+const INNER_RADIUS: float = 60.0
 const RING_WIDTH: float = 4.0
 const SHRINK_SPEED: float = 0.6  # outer ring küçülme oranı (1.0 = sabit)
 

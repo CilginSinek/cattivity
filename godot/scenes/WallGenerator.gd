@@ -1,7 +1,7 @@
 # res://scenes/WallGenerator.gd
 extends Node2D
 
-const HALF_WIDTH: float = 90.0
+const HALF_WIDTH: float = 180.0
 const WALL_THICKNESS: float = 24.0
 const GAP_HEIGHT: float = 130.0
 const TURN_ANGLE: float = PI / 4.0 # 45 derece dönme
