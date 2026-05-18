@@ -8,7 +8,6 @@ require("dotenv").config();
 //* import Routers
 const pageRouter = require("./router/pageRouter");
 const authRouter = require("./router/authRouter");
-// const gameRouter = require("./router/gameRouter");
 const gameRouter = require("./router/gameEventRouter");
 
 //* app settings
@@ -21,14 +20,14 @@ mongoose.connect(process.env.MONGOURL, {}).then(() => {
 
 //* Middlewares
 const corsOptions = {
-  origin: process.env.LOCALHOST,
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
   allowedHeaders: "Content-Type,Authorization",
 };
 app.use(cors(corsOptions));
-app.use(express.static("public"));
+app.use("/public",express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

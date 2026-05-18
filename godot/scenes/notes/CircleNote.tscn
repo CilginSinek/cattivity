@@ -2,15 +2,5 @@
 
 [ext_resource type="Script" uid="uid://phkoaukv2snw" path="res://scenes/notes/CircleNote.gd" id="1_hwfnh"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_f7a1a"]
-radius = 50.0
-
-[node name="CircleNote" type="Node2D" unique_id=145142918]
+[node name="CircleNote" type="Node2D"]
 script = ExtResource("1_hwfnh")
-
-[node name="HitArea" type="Area2D" parent="." unique_id=1089749011]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea" unique_id=336506466]
-shape = SubResource("CircleShape2D_f7a1a")
-
-[node name="Rings" type="Node2D" parent="." unique_id=4202802]

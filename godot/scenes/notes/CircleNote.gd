@@ -1,55 +1,81 @@
 # res://scenes/notes/CircleNote.gd
+# İç içe 2 ring: inner = perfect zone, outer = good zone.
+# Direction'a göre renk ve ok işareti gösterir.
 extends Node2D
 
-signal hit(ring_index: int)
-signal missed
-
-const RING_RADII: Array[float] = [120.0, 80.0, 40.0]
-const RING_COLORS: Array[Color] = [
-	Color(1, 1, 1, 0.3),
-	Color(1, 1, 1, 0.6),
-	Color(1, 1, 1, 1.0),
-]
-
 var time_ms: float = 0.0
-var direction: int = 0  # 0 = left, 1 = right
+var direction: int = 0   # 0 = sol (A tuşu), 1 = sağ (D tuşu)
 var is_hit: bool = false
 
-@onready var hit_area: Area2D = $HitArea
-@onready var rings: Node2D = $Rings
+# Ring yarıçapları [outer, inner]
+const OUTER_RADIUS: float = 55.0
+const INNER_RADIUS: float = 28.0
+const RING_WIDTH: float = 4.0
+const SHRINK_SPEED: float = 0.6  # outer ring küçülme oranı (1.0 = sabit)
+
+# Direction renkleri
+const COLOR_LEFT: Color = Color(0.3, 0.6, 1.0, 0.9)    # mavi = sol
+const COLOR_RIGHT: Color = Color(1.0, 0.5, 0.15, 0.9)  # turuncu = sağ
+const COLOR_INNER: Color = Color(1.0, 1.0, 1.0, 1.0)   # beyaz iç ring
+
+var _outer_ring: Node2D
+var _inner_ring: Node2D
+var _arrow_label: Label
+var _ring_color: Color
 
 func _ready() -> void:
-	_draw_rings()
+	_ring_color = COLOR_LEFT if direction == 0 else COLOR_RIGHT
+	_build_rings()
+	_build_arrow()
 
-func _draw_rings() -> void:
-	for i in range(RING_RADII.size()):
-		var line = Line2D.new()
-		line.width = 3.0
-		line.default_color = RING_COLORS[i]
-		var points: PackedVector2Array = []
-		for j in range(361):
-			var angle = deg_to_rad(float(j))
-			points.append(Vector2(
-				cos(angle) * RING_RADII[i],
-				sin(angle) * RING_RADII[i]
-			))
-		line.points = points
-		rings.add_child(line)
+func _build_rings() -> void:
+	# Outer ring (good zone)
+	_outer_ring = Node2D.new()
+	add_child(_outer_ring)
+	_draw_circle_ring(_outer_ring, OUTER_RADIUS, _ring_color, RING_WIDTH)
 
-func check_hit(touch_position: Vector2) -> int:
-	var dist = global_position.distance_to(touch_position)
-	for i in range(RING_RADII.size() - 1, -1, -1):
-		if dist <= RING_RADII[i]:
-			return i
-	return -1
+	# Inner ring (perfect zone)
+	_inner_ring = Node2D.new()
+	add_child(_inner_ring)
+	_draw_circle_ring(_inner_ring, INNER_RADIUS, COLOR_INNER, RING_WIDTH + 1.0)
 
-func on_player_hit(touch_position: Vector2) -> void:
+func _draw_circle_ring(parent: Node2D, radius: float, color: Color, width: float) -> void:
+	var line = Line2D.new()
+	line.default_color = color
+	line.width = width
+	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	line.end_cap_mode = Line2D.LINE_CAP_ROUND
+	var pts: PackedVector2Array = []
+	var segments: int = 48
+	for i in range(segments + 1):
+		var angle: float = (float(i) / float(segments)) * TAU
+		pts.append(Vector2(cos(angle) * radius, sin(angle) * radius))
+	line.points = pts
+	parent.add_child(line)
+
+func _build_arrow() -> void:
+	# Yön göstergesi: ◀ veya ▶
+	_arrow_label = Label.new()
+	_arrow_label.text = "◀" if direction == 0 else "▶"
+	_arrow_label.add_theme_font_size_override("font_size", 20)
+	_arrow_label.add_theme_color_override("font_color", _ring_color)
+	_arrow_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_arrow_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_arrow_label.position = Vector2(-15, -14)
+	add_child(_arrow_label)
+
+func _process(_delta: float) -> void:
 	if is_hit:
 		return
-	var ring = check_hit(touch_position)
-	if ring >= 0:
-		is_hit = true
-		emit_signal("hit", ring)
-		queue_free()
-	else:
-		emit_signal("missed")
+	# Outer ring hafifçe büyüyüp küçülsün (nefes efekti)
+	var t: float = Time.get_ticks_msec() * 0.001
+	var pulse: float = 1.0 + sin(t * 4.0) * 0.05
+	if _outer_ring:
+		_outer_ring.scale = Vector2(pulse, pulse)
+
+func mark_hit() -> void:
+	is_hit = true
+	# Kısa parlaklık efekti sonra sil
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 0.0, 0.15)
+	tween.tween_callback(queue_free)

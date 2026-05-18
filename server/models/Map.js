@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 
-const InputSchema = new mongoose.Schema(
-  {
-    time: {
-      type: Number,
-      required: true,
-    },
-    direction: {
-      type: Number,
-      enum: [0, 1],
-      required: true,
-    },
-  },
-  { _id: false },
-);
+// const InputSchema = new mongoose.Schema(
+//   {
+//     time: {
+//       type: Number,
+//       required: true,
+//     },
+//     direction: {
+//       type: Number,
+//       enum: [0, 1],
+//       required: true,
+//     },
+//   },
+//   { _id: false },
+// );
 
 const MapSchema = new mongoose.Schema(
   {
@@ -47,13 +47,13 @@ const MapSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    packageUrl: {
+    fileUrl: {
       type: String,
       required: true,
     },
-    inputs: {
-      type: [InputSchema],
-      default: [],
+    audioUrl: {
+      type: String,
+      required: true,
     },
     difficulty: {
       type: String,

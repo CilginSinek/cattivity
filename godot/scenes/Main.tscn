@@ -1,165 +1,137 @@
 [gd_scene format=3 uid="uid://155xx7s6y6ta"]
 
-[ext_resource type="Script" uid="uid://ck0se0p53kx0l" path="res://scenes/Main.gd" id="1_c01mt"]
-[ext_resource type="Script" uid="uid://pd7h85d0g1lw" path="res://scenes/gameplay.gd" id="1_elqb8"]
-[ext_resource type="Script" uid="uid://i60wipixbhom" path="res://scenes/JudgeSystem.gd" id="2_rarhs"]
-[ext_resource type="Script" uid="uid://wddgu6jaiy0m" path="res://scenes/player.gd" id="2_rvslj"]
-[ext_resource type="Script" uid="uid://b2dl135hh1bep" path="res://scenes/NoteSpawner.gd" id="2_vcsgt"]
-[ext_resource type="Script" uid="uid://iic66b5gbohw" path="res://scenes/ScoreManager.gd" id="3_vcsgt"]
-[ext_resource type="Script" uid="uid://ds4i7o5yr84a1" path="res://scenes/HUD.gd" id="7_jlsqs"]
-[ext_resource type="Script" uid="uid://b2ocullyp84l5" path="res://scenes/ResultUI.gd" id="8_q8u5g"]
-[ext_resource type="Texture2D" uid="uid://djqq62qfcpn7p" path="res://assets/player_ravenclaw.png" id="10_lhr70"]
+[ext_resource type="Script" uid="uid://ck0se0p53kx0l" path="res://scenes/Main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scenes/WallGenerator.gd" id="2_wallgen"]
+[ext_resource type="Script" uid="uid://b2dl135hh1bep" path="res://scenes/NoteSpawner.gd" id="3_notespawn"]
+[ext_resource type="Script" uid="uid://i60wipixbhom" path="res://scenes/JudgeSystem.gd" id="4_judge"]
+[ext_resource type="Script" uid="uid://iic66b5gbohw" path="res://scenes/ScoreManager.gd" id="5_score"]
+[ext_resource type="Script" uid="uid://ds4i7o5yr84a1" path="res://scenes/HUD.gd" id="6_hud"]
+[ext_resource type="Script" uid="uid://b2ocullyp84l5" path="res://scenes/ResultUI.gd" id="7_result"]
+[ext_resource type="Script" uid="uid://pd7h85d0g1lw" path="res://scenes/gameplay.gd" id="8_gameplay"]
+[ext_resource type="Script" uid="uid://wddgu6jaiy0m" path="res://scenes/player.gd" id="9_player"]
+[ext_resource type="Texture2D" path="res://assets/SPRITE_RAVENCLAW.png" id="10_tex"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q8u5g"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(16, 16)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wp0k4"]
+[node name="main" type="Node"]
+script = ExtResource("1_main")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bjd11"]
+[node name="WorldContainer" type="Node2D" parent="."]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qmy6f"]
+[node name="WallGenerator" type="Node2D" parent="WorldContainer"]
+script = ExtResource("2_wallgen")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lhr70"]
-size = Vector2(61, 58)
+[node name="NoteSpawner" type="Node" parent="WorldContainer"]
+script = ExtResource("3_notespawn")
 
-[node name="main" type="Node" unique_id=1046669809]
-script = ExtResource("1_c01mt")
-
-[node name="Gameplay" type="Node2D" parent="." unique_id=795176527]
-script = ExtResource("1_elqb8")
-
-[node name="NoteSpawner" type="Node" parent="Gameplay" unique_id=1925321875]
-script = ExtResource("2_vcsgt")
-
-[node name="JudgeSystem" type="Node" parent="Gameplay" unique_id=1487306797]
-script = ExtResource("2_rarhs")
-
-[node name="ScoreManager" type="Node" parent="Gameplay" unique_id=1316854615]
-script = ExtResource("3_vcsgt")
-
-[node name="Effects" type="Node" parent="Gameplay" unique_id=1257091839]
-
-[node name="GameplayWalls" type="StaticBody2D" parent="Gameplay" unique_id=1932550631]
-scale = Vector2(24, 24)
-collision_layer = 2
-collision_mask = 0
-
-[node name="CollisionLeft" type="CollisionShape2D" parent="Gameplay/GameplayWalls" unique_id=1646095424]
-position = Vector2(-17, 0)
-scale = Vector2(0.3, 24)
-shape = SubResource("RectangleShape2D_q8u5g")
-
-[node name="CollisionRight" type="CollisionShape2D" parent="Gameplay/GameplayWalls" unique_id=1808666701]
-position = Vector2(17, 0)
-scale = Vector2(0.3, 24)
-shape = SubResource("RectangleShape2D_wp0k4")
-
-[node name="WallLeftArea" type="Area2D" parent="Gameplay/GameplayWalls" unique_id=1608812468]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/GameplayWalls/WallLeftArea" unique_id=292522825]
-position = Vector2(-17, 0)
-scale = Vector2(0.3, 24)
-shape = SubResource("RectangleShape2D_bjd11")
-
-[node name="WallLeftArea2" type="Area2D" parent="Gameplay/GameplayWalls" unique_id=1309866617]
-
-[node name="WallRightArea" type="CollisionShape2D" parent="Gameplay/GameplayWalls/WallLeftArea2" unique_id=1955895153]
-position = Vector2(17, 0)
-scale = Vector2(0.3, 24)
-shape = SubResource("RectangleShape2D_qmy6f")
-
-[node name="ColorRectLeft" type="ColorRect" parent="Gameplay/GameplayWalls" unique_id=1755488014]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = -14.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1, 24)
-pivot_offset = Vector2(20, 20)
-metadata/_edit_use_anchors_ = true
-
-[node name="ColorRectRight" type="ColorRect" parent="Gameplay/GameplayWalls" unique_id=274278939]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1, 24)
-pivot_offset = Vector2(20, 20)
-metadata/_edit_use_anchors_ = true
-
-[node name="Notes" type="Node" parent="Gameplay/GameplayWalls" unique_id=1286666536]
-
-[node name="UI" type="CanvasLayer" parent="." unique_id=204184494]
-visible = false
-
-[node name="HUD" type="Control" parent="UI" unique_id=832269429]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 5.0
-offset_top = 1.0
-offset_right = 45.0
-offset_bottom = 41.0
-script = ExtResource("7_jlsqs")
-
-[node name="ScoreLabel" type="Label" parent="UI/HUD" unique_id=1914094923]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="ComboLabel" type="Label" parent="UI/HUD" unique_id=170187996]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 17.0
-offset_right = 42.0
-offset_bottom = 40.0
-
-[node name="ResultUI" type="Control" parent="UI" unique_id=438137879]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 8.0
-offset_top = 9.0
-offset_right = 48.0
-offset_bottom = 49.0
-script = ExtResource("8_q8u5g")
-
-[node name="ScoreLabel" type="Label" parent="UI/ResultUI" unique_id=1133084334]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="ComboLabel" type="Label" parent="UI/ResultUI" unique_id=1383854135]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="Audio" type="Node" parent="." unique_id=82212018]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Audio" unique_id=1442482724]
-
-[node name="Player" type="CharacterBody2D" parent="." unique_id=909305351]
-scale = Vector2(2, 2)
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(576, 550)
+collision_layer = 1
 collision_mask = 2
-motion_mode = 1
-script = ExtResource("2_rvslj")
+script = ExtResource("9_player")
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1960660240]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=371198306]
-position = Vector2(-1.5, -3)
-shape = SubResource("RectangleShape2D_lhr70")
-debug_color = Color(0.5613761, 0.5336061, 0.4796641, 0.41960785)
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+texture = ExtResource("10_tex")
+hframes = 3
 
-[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=256182316]
-texture = ExtResource("10_lhr70")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="GameplayInput" type="Node2D" parent="."]
+script = ExtResource("8_gameplay")
+
+[node name="JudgeSystem" type="Node" parent="GameplayInput"]
+script = ExtResource("4_judge")
+
+[node name="ScoreManager" type="Node" parent="GameplayInput"]
+script = ExtResource("5_score")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LoadingLabel" type="Label" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -20.0
+offset_right = 150.0
+offset_bottom = 20.0
+text = "Yükleniyor..."
+horizontal_alignment = 1
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("6_hud")
+
+[node name="ScoreLabel" type="Label" parent="UI/HUD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 250.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 22
+
+[node name="ComboLabel" type="Label" parent="UI/HUD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 44.0
+offset_right = 250.0
+offset_bottom = 68.0
+
+[node name="HealthLabel" type="Label" parent="UI/HUD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 70.0
+offset_right = 250.0
+offset_bottom = 94.0
+
+[node name="ResultUI" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -110.0
+offset_right = 160.0
+offset_bottom = 110.0
+script = ExtResource("7_result")
+
+[node name="ScoreLabel" type="Label" parent="UI/ResultUI"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 36.0
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+
+[node name="ComboLabel" type="Label" parent="UI/ResultUI"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 320.0
+offset_bottom = 70.0
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="UI/ResultUI"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 90.0
+offset_right = 240.0
+offset_bottom = 122.0
+text = "Yeniden Oyna"
+
+[node name="BackButton" type="Button" parent="UI/ResultUI"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 140.0
+offset_right = 240.0
+offset_bottom = 172.0
+text = "Ana Menüye Dön"

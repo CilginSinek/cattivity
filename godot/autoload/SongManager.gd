@@ -6,97 +6,117 @@ signal song_ended
 signal song_paused
 signal song_resumed
 
-var song_time: float = 0.0
+var song_time: float = 0.0   # ms cinsinden
 var is_playing: bool = false
 var offset_ms: float = 0.0
+var duration_ms: float = 0.0
 
+# Web: HTML Audio üzerinden JS callback
+var _js_audio_ref = null
+var _js_ended_callback = null
+
+# Desktop fallback
 @onready var _player: AudioStreamPlayer = AudioStreamPlayer.new()
 var _http: HTTPRequest
 
 func _ready() -> void:
 	add_child(_player)
 	_player.finished.connect(_on_song_finished)
+
 	_http = HTTPRequest.new()
 	add_child(_http)
-	_http.request_completed.connect(_on_download_complete)
+	_http.request_completed.connect(_on_desktop_download_complete)
 
-func _process(delta: float) -> void:
-	if is_playing:
-		song_time += delta * 1000.0
-
-func load_and_play(package_url: String) -> void:
-	var full_url = Config.BASE_URL + package_url
-	_http.request(full_url)
-
-func _read_zip(zip_path: String) -> void:
-	var zip = ZIPReader.new()
-	var err = zip.open(zip_path)
-	if err != OK:
-		push_error("SongManager: zip open failed: " + zip_path)
+func _process(_delta: float) -> void:
+	if not is_playing:
 		return
-	
-	var files = zip.get_files()
-	var mp3_file = ""
-	var json_file = ""
-	for f in files:
-		if f.ends_with(".mp3"):
-			mp3_file = f
-		if f.ends_with(".json"):
-			json_file = f
-	
-	var mp3_data = zip.read_file(mp3_file)
-	var json_bytes = zip.read_file(json_file)
-	zip.close()
-	
-	var json = JSON.new()
-	json.parse(json_bytes.get_string_from_utf8())
-	BeatmapController.load_from_api(json.data)
-	
+
+	if OS.has_feature("web"):
+		# Web: currentTime'ı JS'ten al
+		var t = JavaScriptBridge.eval("window._gameAudio ? window._gameAudio.currentTime * 1000.0 : -1.0")
+		if typeof(t) == TYPE_FLOAT or typeof(t) == TYPE_INT:
+			song_time = float(t)
+			# Manuel bitiş kontrolü (JS ended event yerine yedek)
+			if duration_ms > 0 and song_time >= duration_ms:
+				_on_song_finished()
+	else:
+		song_time = _player.get_playback_position() * 1000.0
+
+func load_and_play_url(audio_url: String) -> void:
+	var full_url = Config.BASE_URL + audio_url
+
+	if OS.has_feature("web"):
+		var offset_s: float = offset_ms / 1000.0
+		var js_code = """
+			(function() {
+				if (window._gameAudio) { window._gameAudio.pause(); window._gameAudio = null; }
+				window._gameAudio = new Audio('%s');
+				window._gameAudio.addEventListener('canplaythrough', function() {
+					window._gameAudio.currentTime = %f;
+					window._gameAudio.play().catch(function(e){ console.error('Audio play failed:', e); });
+				}, { once: true });
+				window._gameAudio.load();
+			})();
+		""" % [full_url, offset_s]
+		JavaScriptBridge.eval(js_code)
+		is_playing = true
+		song_time = offset_ms
+		emit_signal("song_started")
+	else:
+		_http.request(full_url, ["Authorization: " + Config.get_auth_header()])
+
+func _on_desktop_download_complete(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+		push_error("SongManager: audio download başarısız: " + str(response_code))
+		return
 	var stream = AudioStreamMP3.new()
-	stream.data = mp3_data
+	stream.data = body
 	_player.stream = stream
-	
-	play()
-
-func load_and_play_local(zip_path: String) -> void:
-	_read_zip(zip_path)
-
-func _on_download_complete(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	if result != HTTPRequest.RESULT_SUCCESS:
-		push_error("SongManager: download failed")
-		return
-	var temp_path = "user://temp_package.zip"
-	var file = FileAccess.open(temp_path, FileAccess.WRITE)
-	file.store_buffer(body)
-	file.close()
-	_read_zip(temp_path)
+	_player.play(offset_ms / 1000.0)  # offset noktasından başlat
+	is_playing = true
+	song_time = offset_ms
+	emit_signal("song_started")
 
 func play() -> void:
-	if _player.stream != null:
+	if not OS.has_feature("web") and _player.stream != null:
 		_player.play()
 	is_playing = true
 	song_time = 0.0
 	emit_signal("song_started")
 
 func pause() -> void:
-	_player.stream_paused = true
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("if(window._gameAudio) window._gameAudio.pause();")
+	else:
+		_player.stream_paused = true
 	is_playing = false
 	emit_signal("song_paused")
 
 func resume() -> void:
-	_player.stream_paused = false
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("if(window._gameAudio) window._gameAudio.play();")
+	else:
+		_player.stream_paused = false
 	is_playing = true
 	emit_signal("song_resumed")
 
 func stop() -> void:
-	_player.stop()
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("if(window._gameAudio){ window._gameAudio.pause(); window._gameAudio.currentTime=0; }")
+	else:
+		_player.stop()
 	is_playing = false
 	song_time = 0.0
 
 func set_offset(ms: float) -> void:
 	offset_ms = ms
 
+func set_duration(ms: float) -> void:
+	duration_ms = ms
+
 func _on_song_finished() -> void:
+	if not is_playing:
+		return
 	is_playing = false
 	emit_signal("song_ended")
 	GameStateManager.end_game()

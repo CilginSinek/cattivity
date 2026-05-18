@@ -6,6 +6,8 @@
 .import/
 export.cfg
 export_credentials.cfg
+godot/export/
+export_presets.cfg
 *.tmp
 
 # Imported translations (automatically generated from CSV files)

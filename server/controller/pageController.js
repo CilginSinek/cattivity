@@ -218,8 +218,67 @@ exports.getmap = async (req, res) => {
 
 exports.maps = async (req, res) => {
   try {
-    const maps = await Map.find();
-    res.status(200).json(maps);
+    const maps = await Map.find().lean();
+    if (maps.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    const mapIds = maps.map((map) => map._id);
+    const scoreRows = await Play.aggregate([
+      { $match: { playedMap: { $in: mapIds } } },
+      {
+        $group: {
+          _id: { mapId: "$playedMap", userId: "$player" },
+          maxScore: { $max: "$score" },
+        },
+      },
+      { $sort: { "_id.mapId": 1, maxScore: -1, "_id.userId": 1 } },
+    ]);
+
+    const userIdStr = req.userId.toString();
+    const userStatsByMap = Object.create(null);
+    const rankStateByMap = Object.create(null);
+
+    // Build per-map user rank based on max scores.
+    for (const row of scoreRows) {
+      const mapIdStr = row._id.mapId.toString();
+      const playerIdStr = row._id.userId.toString();
+
+      let state = rankStateByMap[mapIdStr];
+      if (!state) {
+        state = { index: 0, rank: 0, lastScore: null };
+        rankStateByMap[mapIdStr] = state;
+      }
+
+      state.index += 1;
+      if (state.lastScore === null || row.maxScore !== state.lastScore) {
+        state.rank = state.index;
+        state.lastScore = row.maxScore;
+      }
+
+      if (playerIdStr === userIdStr) {
+        userStatsByMap[mapIdStr] = {
+          userRank: state.rank,
+          userMaxScore: row.maxScore,
+        };
+      }
+    }
+
+    const mapsWithUserStats = maps.map((map) => {
+      const mapIdStr = map._id.toString();
+      const stats = userStatsByMap[mapIdStr] || {
+        userRank: null,
+        userMaxScore: 0,
+      };
+
+      return {
+        ...map,
+        userRank: stats.userRank,
+        userMaxScore: stats.userMaxScore,
+      };
+    });
+
+    res.status(200).json(mapsWithUserStats);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

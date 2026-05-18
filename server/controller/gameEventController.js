@@ -26,9 +26,12 @@ exports.savePlay = async (req, res) => {
 
     myUser.plays.push(play._id);
     await myUser.save();
-    const resplay = await play
-      .populate("player", "name coalition")
-      .populate("playedMap", "name artist creator");
+    const resplay = await play.populate([
+      { path: "player", select: "name coalition" },
+      { path: "playedMap", select: "name artist creator" },
+    ]);
+    map.playCount += 1;
+    await map.save();
     res.status(201).json({ status: "success", resplay });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -37,16 +40,19 @@ exports.savePlay = async (req, res) => {
 
 exports.uploadMap = async (req, res) => {
   try {
-    const { name, artist, bpm, offset, duration, inputs } = req.body;
+    const {
+      name,
+      artist,
+      bpm,
+      offset,
+      duration,
+      description,
+      difficulty,
+      tags,
+    } = req.body;
 
-    if (!name || !artist || !bpm || !duration || !Array.isArray(inputs))
+    if (!name || !artist || !bpm || !duration)
       return res.status(400).json({ error: "Missing required fields" });
-
-    if (inputs.some((input) => !input.time || !input.direction))
-      return res.status(400).json({ error: "Invalid input format" });
-
-    if (inputs.some((input) => input.direction !== 1 && input.direction !== 0))
-      return res.status(400).json({ error: "Invalid input direction" });
 
     if (isNaN(bpm) || isNaN(duration) || (offset && isNaN(offset)))
       return res
@@ -56,12 +62,24 @@ exports.uploadMap = async (req, res) => {
     if (offset && offset < 0)
       return res.status(400).json({ error: "Offset cannot be negative" });
 
-    if (!req.files.pakage)
-      return res.status(400).json({ error: "Map package file is required" });
+    const files = req.files || {};
+    const audioFile =
+      files.audio || files.audioFile || files.song || files.sound;
+    const jsonFile =
+      files.map || files.mapFile || files.beatmap || files.json || files.file;
 
-    const packageFile = req.files.pakage;
-    const packageUrl = `/uploads/${Date.now()}_${packageFile.name}`;
-    await packageFile.mv(`./public${packageUrl}`);
+    if (!audioFile || !jsonFile) {
+      return res
+        .status(400)
+        .json({ error: "Audio and map JSON files are required" });
+    }
+
+    const timestamp = Date.now();
+    const audioUrl = `/uploads/${timestamp}_${audioFile.name}`;
+    const fileUrl = `/uploads/${timestamp}_${jsonFile.name}`;
+
+    await audioFile.mv(`./public${audioUrl}`);
+    await jsonFile.mv(`./public${fileUrl}`);
 
     const newMap = await Map.create({
       name,
@@ -70,8 +88,11 @@ exports.uploadMap = async (req, res) => {
       bpm,
       offset: offset || 0,
       duration,
-      packageUrl,
-      inputs,
+      description: description || "",
+      difficulty,
+      tags,
+      fileUrl,
+      audioUrl,
     });
 
     res.status(201).json({ status: "success", map: newMap });
@@ -98,10 +119,13 @@ exports.deleteMap = async (req, res) => {
     ) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    fs.unlink(`./public${map.packageUrl}`, (err) => {
-      if (err) {
-        console.error("Failed to delete map package file:", err);
-      }
+    const filePaths = [map.fileUrl, map.audioUrl].filter(Boolean);
+    filePaths.forEach((filePath) => {
+      fs.unlink(`./public${filePath}`, (err) => {
+        if (err) {
+          console.error("Failed to delete map file:", err);
+        }
+      });
     });
     await Map.findByIdAndDelete(mapId);
     res.status(200).json({ status: "success" });
