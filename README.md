@@ -67,4 +67,4 @@ Oyun içi ayarların backend isteklerini `http://localhost:3000` adresine (CORS 
 
 ## 📜 Lisans
 
-Bu proje MIT lisansı altında sunulmaktadır.
+Bu proje MIT     lisansı altında sunulmaktadır.
