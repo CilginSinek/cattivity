@@ -24,3 +24,6 @@ func _on_quit_button_pressed() -> void:
 
 func _on_setting_pressed() -> void:
 	GameStateManager.go_to_settings()
+
+func _on_leaderboard_pressed() -> void:
+	GameStateManager.go_to_leaderboard()

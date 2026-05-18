@@ -36,6 +36,10 @@ alignment = 1
 layout_mode = 2
 text = "Play"
 
+[node name="Leaderboard" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Leaderboard"
+
 [node name="Setting" type="Button" parent="CenterContainer/VBoxContainer" unique_id=144807623]
 layout_mode = 2
 text = "Setting"
@@ -45,5 +49,6 @@ layout_mode = 2
 text = "Quit"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_press_play"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Leaderboard" to="." method="_on_leaderboard_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Setting" to="." method="_on_setting_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Quit" to="." method="_on_quit_button_pressed"]

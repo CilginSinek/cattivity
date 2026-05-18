@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://c4x6mqo7ya3hh"]
+
+[ext_resource type="Script" path="res://scenes/Leaderboard.gd" id="1_leaderboard"]
+
+[node name="Leaderboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_leaderboard")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.08, 0.12, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderBox" type="HBoxContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBox/HeaderBox"]
+layout_mode = 2
+text = "< Geri"
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HeaderBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Liderlik Tablosu"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 32
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBox"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 400)
+
+[node name="UserList" type="VBoxContainer" parent="MarginContainer/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="PaginationContainer" type="HBoxContainer" parent="MarginContainer/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="PrevButton" type="Button" parent="MarginContainer/VBox/PaginationContainer"]
+layout_mode = 2
+text = "< Önceki"
+
+[node name="PageLabel" type="Label" parent="MarginContainer/VBox/PaginationContainer"]
+layout_mode = 2
+text = "Sayfa 1"
+custom_minimum_size = Vector2(80, 0)
+horizontal_alignment = 1
+
+[node name="NextButton" type="Button" parent="MarginContainer/VBox/PaginationContainer"]
+layout_mode = 2
+text = "Sonraki >"

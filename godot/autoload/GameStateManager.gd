@@ -13,6 +13,10 @@ func go_to_map_select() -> void:
 
 func go_to_settings() -> void:
 	get_tree().change_scene_to_file("res://scenes/Settings.tscn")
+
+func go_to_leaderboard() -> void:
+	get_tree().change_scene_to_file("res://scenes/Leaderboard.tscn")
+
 func go_to_menu() -> void:
 	_set_state(State.MENU)
 	get_tree().change_scene_to_file("res://scenes/Menu.tscn")

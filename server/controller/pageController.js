@@ -65,15 +65,28 @@ exports.leaderboard = async (req, res) => {
           as: "plays",
         },
       },
+      { $unwind: { path: "$plays", preserveNullAndEmptyArrays: true } },
       {
-        $addFields: {
-          totalScore: { $sum: "$plays.score" },
+        $group: {
+          _id: { userId: "$_id", mapId: "$plays.playedMap" },
+          user: { $first: "$$ROOT" },
+          maxScore: { $max: "$plays.score" },
         },
       },
+      {
+        $group: {
+          _id: "$_id.userId",
+          user: { $first: "$user" },
+          totalScore: { $sum: "$maxScore" },
+        },
+      },
+      { $addFields: { "user.totalScore": "$totalScore" } },
+      { $replaceRoot: { newRoot: "$user" } },
       {
         $project: {
           password: 0,
           plays: 0,
+          email: 0,
         },
       },
       {
@@ -82,7 +95,7 @@ exports.leaderboard = async (req, res) => {
     ])
       .limit(limit)
       .skip(skip);
-    res.status(200).json(users);
+    res.status(200).json({ users, maxPage: Math.ceil((await User.countDocuments()) / limit) });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
